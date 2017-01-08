@@ -105,6 +105,16 @@ If (GetVars('act', 'GET') == "CountTags") {
   echo implode("\n",$arrTags);
   die();
 } else {
+  $zbp->LoadCategorys();
+  $zbp->AddBuildModule('catalog');
+  //$zbp->AddBuildModule('previous');
+  //$zbp->AddBuildModule('calendar');
+  //$zbp->AddBuildModule('comments');
+  //$zbp->AddBuildModule('archives');
+  //$zbp->AddBuildModule('tags');
+  //$zbp->AddBuildModule('authors');
+  $zbp->BuildModule();
+  $zbp->SaveCache();
   fnCountUsr($arrUser, GetVars('act', 'GET') == "run");
   fnCountCat($arrCate, GetVars('act', 'GET') == "run");
 }
