@@ -3,7 +3,7 @@
 <id>xnxf_CountAll</id>
 <name>强制更新各种文章统计</name>
 <url>https://app.zblogcn.com/?auth=80</url>
-<note>强制更新各种文章统计</note>
+<note>强制更新各种文章统计，以及检测附件是否被引用</note>
 <description>置百丈玄冰而崩裂，掷须臾池水而漂摇。</description>
 <path>main.php</path>
 <include>include.php</include>
@@ -19,13 +19,15 @@
   <url></url>
 </source>
 <adapted>151626</adapted>
-<version>1.0</version>
+<version>0.2</version>
 <pubdate>2016-12-05</pubdate>
-<modified>2017-01-06</modified>
-<price>0</price>
+<modified>2017-04-25</modified>
+<price>10.24</price>
+<phpver>5.4</phpver>
 <advanced>
   <dependency></dependency>
   <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
   <conflict></conflict>
 </advanced>
 <sidebars>
