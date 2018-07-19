@@ -168,6 +168,7 @@ if (GetVars('act', 'GET') == "Tags") {
   echo fnCheckAttach($p);
   die();
 } else {
+  $zbp->BuildTemplate();
   $zbp->LoadCategorys();
   $zbp->AddBuildModule('catalog');
   //$zbp->AddBuildModule('previous');
