@@ -145,7 +145,17 @@ $arrUser[0] = array("","名称","文章","页面","评论","附件");
 $arrCate = array();
 $arrCate[0] = array("","名称","文章");
 
-if (GetVars('act', 'GET') == "Tags") {
+if (GetVars('act', 'GET') == "FixTags") {
+  $p = (int) GetVars('page', 'GET');
+  $array = $zbp->GetArticleList(null, null, null, array(
+    $p * 50,
+    50
+  ), '');
+  foreach ($array as $post) {
+    echo CountAll_FixPostTags($post->ID);
+  }
+  die();
+}elseif (GetVars('act', 'GET') == "Tags") {
   $p = (int) GetVars('page', 'GET');
   $array = $zbp->GetTagList('', '', array(
     'tag_ID' => 'ASC'
@@ -156,7 +166,9 @@ if (GetVars('act', 'GET') == "Tags") {
   $arrTags = array();
   $strTags = "";
   foreach ($array as $tag) {
-    $arrTags[] = $tag->Name;
+    if (isset($arrTags[$tag->Name]))
+      continue;
+    $arrTags[$tag->Name] = $tag->Name;
     $strTags .= "{" . $tag->ID . "}";
   }
   CountTagArrayString($strTags);
@@ -210,21 +222,26 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <form action="main.php" method="get">
       <input type="hidden" value="run" name="act">
       <input type="submit" value="统计文章" class="button">
-      <input type="button" value="统计Tags" class="button js-countTags">
-      <input type="button" value="统计附件" class="button js-countAttachs">
+      <input type="button" value="统计Tags" class="button js-Tags">
+      <input type="button" value="统计附件" class="button js-Attachs">
+      <input type="button" value="修复重复的Tag" class="button js-FixTags">
       <a href="main.php">刷新</a>
     </form>
   </div>
 </div>
 <script>
 $(function () {
-  $(".js-countAttachs").click(function () {
+  $(".js-Attachs").click(function () {
     $(".result").html("未在<b>文章或页面</b>中引用的附件<br />");
-    fnAjax(0, "Attachs")
+    fnAjax(0, "Attachs");
   });
-  $(".js-countTags").click(function () {
+  $(".js-Tags").click(function () {
     $(".result").html("");
-    fnAjax(0, "Tags")
+    fnAjax(0, "Tags");
+  });
+  $(".js-FixTags").click(function () {
+    $(".result").html("");
+    fnAjax(0, "FixTags");
   });
   // $(".js-countAttachs").click();
   function fnAjax(page, act) {
@@ -249,7 +266,7 @@ $(function () {
       }
     });
   }
-})
+});
 </script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
