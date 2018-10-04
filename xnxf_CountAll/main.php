@@ -148,30 +148,31 @@ $arrCate[0] = array("","名称","文章");
 if (GetVars('act', 'GET') == "FixTags") {
   $p = (int) GetVars('page', 'GET');
   $array = $zbp->GetArticleList(null, null, null, array(
-    $p * 50,
-    50
+    $p * 137,
+    137
   ), '');
   foreach ($array as $post) {
-    echo CountAll_FixPostTags($post->ID);
+    echo CountAll_FixPostTags($post);
   }
+  CountAll_DelTags();
   die();
 }elseif (GetVars('act', 'GET') == "Tags") {
   $p = (int) GetVars('page', 'GET');
   $array = $zbp->GetTagList('', '', array(
     'tag_ID' => 'ASC'
   ), array(
-    $p * 50,
-    50
+    $p * 137,
+    137
   ), '');
   $arrTags = array();
-  $strTags = "";
-  foreach ($array as $tag) {
-    if (isset($arrTags[$tag->Name]))
-      continue;
-    $arrTags[$tag->Name] = $tag->Name;
-    $strTags .= "{" . $tag->ID . "}";
+  // echo count($array);
+  foreach ($array as &$tag) {
+    $arrTags[$tag->ID] = $tag->Name . $tag->Count;
+    CountTag($tag, $plus);
+    $arrTags[$tag->ID].="→".$tag->Count;
+    $tag->Save();
+    $arrTags[$tag->ID] = "<span>{$arrTags[$tag->ID]}</span>";
   }
-  CountTagArrayString($strTags);
   echo implode("\n",$arrTags);
   die();
 } elseif (GetVars('act', 'GET') == "Attachs") {
@@ -207,8 +208,14 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   <div id="divMain2">
     <style>
     table{
-      width: 45%;
+    width: 45%;
     }
+    .result span {
+	    min-width: 12%;
+	    max-width: 25%;
+	    display: block;
+	    float: left;
+	}
     </style>
     <div class="result">
     <table class="tableBorder">
@@ -219,7 +226,8 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <?php fnEcho($arrCate); ?>
     </table>
     </div>
-    <form action="main.php" method="get">
+    <div style="clear:both;"></div>
+    <form action="main.php" method="get" id="form">
       <input type="hidden" value="run" name="act">
       <input type="submit" value="统计文章" class="button">
       <input type="button" value="统计Tags" class="button js-Tags">
@@ -258,11 +266,16 @@ $(function () {
             fnAjax(page + 1, act);
         } else {
           $(".result").append(data);
-          $(".result").append("<br />");
           if (data !== "") {
             fnAjax(page + 1, act);
+            $(".result").append("<div style=\"clear:both;\">---运行中---</div>");
+          } else {
+            $(".result").append("<div style=\"clear:both;\">---完成---</div>");
           }
         }
+        $('html, body').animate({
+          scrollTop: $("#form").offset().top
+        }, 300);
       }
     });
   }
