@@ -2,7 +2,7 @@
 <plugin version="php">
 <id>xnxf_CountAll</id>
 <name>强制更新各种文章统计</name>
-<url>https://app.zblogcn.com/?auth=80</url>
+<url>http://www.yilan.io/site/5b9ba575f43f90c11d460025</url>
 <note>强制更新各种文章统计，以及检测附件是否被引用</note>
 <description>置百丈玄冰而崩裂，掷须臾池水而漂摇。</description>
 <path>main.php</path>
@@ -11,7 +11,7 @@
 <author>
   <name>沉冰浮水</name>
   <email>wdssmq@qq.com</email>
-  <url>http://www.wdssmq.com</url>
+  <url>https://www.wdssmq.com</url>
 </author>
 <source>
   <name></name>
@@ -21,8 +21,8 @@
 <adapted>151626</adapted>
 <version>0.2</version>
 <pubdate>2016-12-05</pubdate>
-<modified>2018-10-04</modified>
-<price>10.24</price>
+<modified>2018-10-11</modified>
+<price>13.7</price>
 <phpver>5.4</phpver>
 <advanced>
   <dependency></dependency>

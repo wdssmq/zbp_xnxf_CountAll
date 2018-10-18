@@ -168,7 +168,7 @@ if (GetVars('act', 'GET') == "FixTags") {
   // echo count($array);
   foreach ($array as &$tag) {
     $arrTags[$tag->ID] = $tag->Name . $tag->Count;
-    CountTag($tag, $plus);
+    CountTag($tag);
     $arrTags[$tag->ID].="→".$tag->Count;
     $tag->Save();
     $arrTags[$tag->ID] = "<span>{$arrTags[$tag->ID]}</span>";
