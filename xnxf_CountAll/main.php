@@ -2,11 +2,17 @@
 require '../../../zb_system/function/c_system_base.php';
 require '../../../zb_system/function/c_system_admin.php';
 $zbp->Load();
-$action='root';
-if (!$zbp->CheckRights($action)) {$zbp->ShowError(6);die();}
-if (!$zbp->CheckPlugin('xnxf_CountAll')) {$zbp->ShowError(48);die();}
+$action = 'root';
+if (!$zbp->CheckRights($action)) {
+  $zbp->ShowError(6);
+  die();
+}
+if (!$zbp->CheckPlugin('xnxf_CountAll')) {
+  $zbp->ShowError(48);
+  die();
+}
 
-$blogtitle='统计更新';
+$blogtitle = '统计更新';
 
 function fnCountUsr(&$arrNums, $r = null)
 {
@@ -51,9 +57,9 @@ function fnCountCat(&$arrNums, $r = null)
     } else {
       $arrNums[$Cate->ID][] = '更新后';
     }
-    $arrID[]              = $Cate->ID;
-    $arrNums[$Cate->ID][] =  $Cate->Name;
-    $arrNums[$Cate->ID][] =  $Cate->Count;
+    $arrID[] = $Cate->ID;
+    $arrNums[$Cate->ID][] = $Cate->Name;
+    $arrNums[$Cate->ID][] = $Cate->Count;
     if ($r === true) {
       $arrNums[$Cate->ID][] = 'br';
     }
@@ -72,37 +78,41 @@ function fnEcho($arr)
       fnEcho($item);
       echo "</tr>";
     } else {
-      if ($item !== "br"){
+      if ($item !== "br") {
         echo "<td>$item</td>";
-      }else{
+      } else {
         echo "</tr><tr>";
       }
     }
   }
 }
 
-function fnCountAttach(&$arrFiles,$dir){
+function fnCountAttach(&$arrFiles, $dir)
+{
   global $zbp;
-  foreach(GetFilesInDir($dir,$zbp->option['ZC_UPLOAD_FILETYPE']) as $file){
-    $arrFiles [] = str_replace(ZBP_PATH,"",$file);
+  foreach (GetFilesInDir($dir, $zbp->option['ZC_UPLOAD_FILETYPE']) as $file) {
+    $arrFiles[] = str_replace(ZBP_PATH, "", $file);
   }
   $dirSub = GetDirsInDir($dir);
-  if (count($dirSub) > 0){
-    foreach($dirSub as $d) {
+  if (count($dirSub) > 0) {
+    foreach ($dirSub as $d) {
       fnCountAttach($arrFiles, "$dir$d/");
     }
+  } else {
+    $arrFiles[] = str_replace(ZBP_PATH, "", $dir);
   }
 }
 
-function fnCheckAttach($page = 1) {
+function fnCheckAttach($page = 0)
+{
   global $zbp;
   $files = array();
   $filesJSON = ZBP_PATH . 'zb_users/cache/OOYOG7.json';
 
-  if (!file_exists($filesJSON)){
+  if (!file_exists($filesJSON)) {
     $dirUp = ZBP_PATH . 'zb_users/upload/';
-    fnCountAttach($files,$dirUp);
-    file_put_contents($filesJSON,json_encode($files));
+    fnCountAttach($files, $dirUp);
+    file_put_contents($filesJSON, json_encode($files));
   } else {
     $files = json_decode(file_get_contents($filesJSON));
   }
@@ -114,7 +124,7 @@ function fnCheckAttach($page = 1) {
   $w = array();
   $step = 20;
   $start = $page * $step;
-  for ($k = $start;$k <= $start + $step - 1;$k++) {
+  for ($k = $start; $k < $start + $step; $k++) {
     $w = array();
     $w[] = array('<>', 'log_Type', '1024');
     $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $files[$k]);
@@ -129,7 +139,7 @@ function fnCheckAttach($page = 1) {
     if (count($ArticleList) === 0) {
       $objResponse->files[] = $zbp->host . $files[$k];
     }
-    if (isset($files[$k+1]))
+    if (isset($files[$k + 1]))
       $objResponse->more = 1;
     else {
       $objResponse->more = 0;
@@ -141,12 +151,12 @@ function fnCheckAttach($page = 1) {
 }
 
 $arrUser = array();
-$arrUser[0] = array("","名称","文章","页面","评论","附件");
+$arrUser[0] = array("", "名称", "文章", "页面", "评论", "附件");
 $arrCate = array();
-$arrCate[0] = array("","名称","文章");
+$arrCate[0] = array("", "名称", "文章");
 
 if (GetVars('act', 'GET') == "FixTags") {
-  $p = (int) GetVars('page', 'GET');
+  $p = (int)GetVars('page', 'GET');
   $array = $zbp->GetArticleList(null, null, null, array(
     $p * 137,
     137
@@ -156,8 +166,8 @@ if (GetVars('act', 'GET') == "FixTags") {
   }
   CountAll_DelTags();
   die();
-}elseif (GetVars('act', 'GET') == "Tags") {
-  $p = (int) GetVars('page', 'GET');
+} elseif (GetVars('act', 'GET') == "Tags") {
+  $p = (int)GetVars('page', 'GET');
   $array = $zbp->GetTagList('', '', array(
     'tag_ID' => 'ASC'
   ), array(
@@ -169,14 +179,14 @@ if (GetVars('act', 'GET') == "FixTags") {
   foreach ($array as &$tag) {
     $arrTags[$tag->ID] = $tag->Name . $tag->Count;
     CountTag($tag);
-    $arrTags[$tag->ID].="→".$tag->Count;
+    $arrTags[$tag->ID] .= "→" . $tag->Count;
     $tag->Save();
     $arrTags[$tag->ID] = "<span>{$arrTags[$tag->ID]}</span>";
   }
-  echo implode("\n",$arrTags);
+  echo implode("\n", $arrTags);
   die();
 } elseif (GetVars('act', 'GET') == "Attachs") {
-  $p = (int) GetVars('page', 'GET');
+  $p = (int)GetVars('page', 'GET');
   header("Content-type:text/json");
   echo fnCheckAttach($p);
   die();
@@ -200,10 +210,10 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 require $blogpath . 'zb_system/admin/admin_top.php';
 ?>
 <div id="divMain">
-  <div class="divHeader"><?php echo $blogtitle;?></div>
+  <div class="divHeader"><?php echo $blogtitle; ?></div>
   <div class="SubMenu">
     <a href="main.php"><span class="m-left m-now">首页</span></a>
-    <?php require "about.php";?>
+    <?php require "about.php"; ?>
   </div>
   <div id="divMain2">
     <style>
@@ -240,7 +250,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <script>
 $(function () {
   $(".js-Attachs").click(function () {
-    $(".result").html("未在<b>文章或页面</b>中引用的附件<br />");
+    $(".result").html("未在<b>文章或页面</b>中引用的附件（含空文件夹）<br />");
     fnAjax(0, "Attachs");
   });
   $(".js-Tags").click(function () {
