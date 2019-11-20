@@ -243,7 +243,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       if (confirm('确定：转到附件管理并标红未使用的文件；取消：遍历文件并列出未引用')) {
         window.location.href = zbp.options.bloghost + 'zb_system/admin/index.php?act=UploadMng';
       } else {
-        $(".result").html("未在<b>文章或页面</b>中引用的附件（含空文件夹）<br />");
+        $(".result").html("<p>未在<b>文章或页面</b>中引用的附件（含空文件夹）</p><h3>请谨慎删除<h3>");
         fnAjax(0, "Attachs");
       }
     });
@@ -265,9 +265,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             console.log(data.files);
             for (var item in data.files) {
               $(".result").append('<a href="-url-" target="_blank" title="-url-">-url-</a><br />'.replace(/-url-/g, data["files"][item]));
+              if (data["files"][item].substr(-1,1) === "/"){
+                $(".result").append("----<br>");
+              }
             }
-            if (data.more)
+            if (data.more){
               fnAjax(page + 1, act);
+            } else {
+              $(".result").append("<h3>请谨慎删除<h3>");
+            }
           } else {
             $(".result").append(data);
             if (data !== "") {
