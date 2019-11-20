@@ -81,7 +81,7 @@ function fnEcho($arr)
       if ($item !== "br") {
         echo "<td>$item</td>";
       } else {
-        echo "</tr><tr>";
+        echo '</tr><tr style="font-weight:700">';
       }
     }
   }
@@ -125,18 +125,7 @@ function fnCheckAttach($page = 0)
   $step = 20;
   $start = $page * $step;
   for ($k = $start; $k < $start + $step; $k++) {
-    $w = array();
-    $w[] = array('<>', 'log_Type', '1024');
-    $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $files[$k]);
-    $ArticleList = $zbp->GetArticleList(
-      "",
-      $w,
-      array('log_PostTime' => 'DESC'),
-      array(0, 3),
-      null,
-      false
-    );
-    if (count($ArticleList) === 0) {
+    if (CountAll_UploadUnused($files[$k])) {
       $objResponse->files[] = $zbp->host . $files[$k];
     }
     if (isset($files[$k + 1]))
@@ -156,7 +145,7 @@ $arrCate = array();
 $arrCate[0] = array("", "名称", "文章");
 
 if (GetVars('act', 'GET') == "FixTags") {
-  $p = (int)GetVars('page', 'GET');
+  $p = (int) GetVars('page', 'GET');
   $array = $zbp->GetArticleList(null, null, null, array(
     $p * 137,
     137
@@ -167,7 +156,7 @@ if (GetVars('act', 'GET') == "FixTags") {
   CountAll_DelTags();
   die();
 } elseif (GetVars('act', 'GET') == "Tags") {
-  $p = (int)GetVars('page', 'GET');
+  $p = (int) GetVars('page', 'GET');
   $array = $zbp->GetTagList('', '', array(
     'tag_ID' => 'ASC'
   ), array(
@@ -186,7 +175,7 @@ if (GetVars('act', 'GET') == "FixTags") {
   echo implode("\n", $arrTags);
   die();
 } elseif (GetVars('act', 'GET') == "Attachs") {
-  $p = (int)GetVars('page', 'GET');
+  $p = (int) GetVars('page', 'GET');
   header("Content-type:text/json");
   echo fnCheckAttach($p);
   die();
@@ -217,24 +206,25 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </div>
   <div id="divMain2">
     <style>
-    table{
-    width: 45%;
-    }
-    .result span {
-	    min-width: 12%;
-	    max-width: 25%;
-	    display: block;
-	    float: left;
-	}
+      table {
+        width: 45%;
+      }
+
+      .result span {
+        min-width: 12%;
+        max-width: 25%;
+        display: block;
+        float: left;
+      }
     </style>
     <div class="result">
-    <table class="tableBorder">
-    <tbody><?php fnEcho($arrUser); ?></tbody>
-    </table>
-    -----
-    <table class="tableBorder">
-    <?php fnEcho($arrCate); ?>
-    </table>
+      <table class="tableBorder">
+        <tbody><?php fnEcho($arrUser); ?></tbody>
+      </table>
+      -----
+      <table class="tableBorder">
+        <?php fnEcho($arrCate); ?>
+      </table>
     </div>
     <div style="clear:both;"></div>
     <form action="main.php" method="get" id="form">
@@ -248,48 +238,52 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </div>
 </div>
 <script>
-$(function () {
-  $(".js-Attachs").click(function () {
-    $(".result").html("未在<b>文章或页面</b>中引用的附件（含空文件夹）<br />");
-    fnAjax(0, "Attachs");
-  });
-  $(".js-Tags").click(function () {
-    $(".result").html("");
-    fnAjax(0, "Tags");
-  });
-  $(".js-FixTags").click(function () {
-    $(".result").html("");
-    fnAjax(0, "FixTags");
-  });
-  // $(".js-countAttachs").click();
-  function fnAjax(page, act) {
-    $.ajax({
-      url: zbp.options.bloghost + "zb_users/plugin/xnxf_CountAll/main.php?act=" + act + "&page=" + page,
-      type: "get",
-      success: function (data) {
-        if (act == "Attachs") {
-          console.log(data.files);
-          for (var item in data.files) {
-            $(".result").append('<a href="-url-" target="_blank" title="-url-">-url-</a><br />'.replace(/-url-/g, data["files"][item]));
-          }
-          if (data.more)
-            fnAjax(page + 1, act);
-        } else {
-          $(".result").append(data);
-          if (data !== "") {
-            fnAjax(page + 1, act);
-            $(".result").append("<div style=\"clear:both;\">---运行中---</div>");
-          } else {
-            $(".result").append("<div style=\"clear:both;\">---完成---</div>");
-          }
-        }
-        $('html, body').animate({
-          scrollTop: $("#form").offset().top
-        }, 300);
+  $(function() {
+    $(".js-Attachs").click(function() {
+      if (confirm('确定：转到附件管理并标红未使用的文件；取消：遍历文件并列出未引用')) {
+        window.location.href = zbp.options.bloghost + 'zb_system/admin/index.php?act=UploadMng';
+      } else {
+        $(".result").html("未在<b>文章或页面</b>中引用的附件（含空文件夹）<br />");
+        fnAjax(0, "Attachs");
       }
     });
-  }
-});
+    $(".js-Tags").click(function() {
+      $(".result").html("");
+      fnAjax(0, "Tags");
+    });
+    $(".js-FixTags").click(function() {
+      $(".result").html("");
+      fnAjax(0, "FixTags");
+    });
+    // $(".js-countAttachs").click();
+    function fnAjax(page, act) {
+      $.ajax({
+        url: zbp.options.bloghost + "zb_users/plugin/xnxf_CountAll/main.php?act=" + act + "&page=" + page,
+        type: "get",
+        success: function(data) {
+          if (act == "Attachs") {
+            console.log(data.files);
+            for (var item in data.files) {
+              $(".result").append('<a href="-url-" target="_blank" title="-url-">-url-</a><br />'.replace(/-url-/g, data["files"][item]));
+            }
+            if (data.more)
+              fnAjax(page + 1, act);
+          } else {
+            $(".result").append(data);
+            if (data !== "") {
+              fnAjax(page + 1, act);
+              $(".result").append("<div style=\"clear:both;\">---运行中---</div>");
+            } else {
+              $(".result").append("<div style=\"clear:both;\">---完成---</div>");
+            }
+          }
+          $('html, body').animate({
+            scrollTop: $("#form").offset().top
+          }, 300);
+        }
+      });
+    }
+  });
 </script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

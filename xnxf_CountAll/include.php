@@ -4,14 +4,38 @@ RegisterPlugin("xnxf_CountAll", "ActivePlugin_xnxf_CountAll");
 
 function ActivePlugin_xnxf_CountAll()
 {
+  Add_Filter_Plugin('Filter_Plugin_Admin_UploadMng_Table', 'CountAll__Upload');
+}
+function CountAll__Upload($upload, &$ret, $tableHeaders)
+{
+  if (CountAll_UploadUnused($upload->Name)) {
+    $ret[0] = '<tr style="color: red;">';
+  }
 }
 function InstallPlugin_xnxf_CountAll()
-{
-}
+{ }
 function UninstallPlugin_xnxf_CountAll()
+{ }
+function CountAll_UploadUnused($file)
 {
+  global $zbp;
+  $w = array();
+  $w[] = array('<>', 'log_Type', '1024');
+  $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $file);
+  $ArticleList = $zbp->GetArticleList(
+    "",
+    $w,
+    array('log_PostTime' => 'DESC'),
+    array(0, 3),
+    null,
+    false
+  );
+  if (count($ArticleList) === 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
-
 function CountAll_FixPostTags(&$article)
 {
   global $zbp;
