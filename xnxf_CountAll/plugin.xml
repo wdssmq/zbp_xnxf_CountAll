@@ -2,7 +2,7 @@
 <plugin version="php">
 <id>xnxf_CountAll</id>
 <name>强制更新各种文章统计</name>
-<url>http://www.yilan.io/site/5b9ba575f43f90c11d460025</url>
+<url>//jq.qq.com/?_wv=1027&amp;k=555hND5</url>
 <note>强制更新各种文章统计，以及检测附件是否被引用</note>
 <description>置百丈玄冰而崩裂，掷须臾池水而漂摇。</description>
 <path>main.php</path>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>151626</adapted>
-<version>0.2</version>
-<pubdate>2016-12-05</pubdate>
-<modified>2019-11-20</modified>
+<adapted>162135</adapted>
+<version>1.0.2</version>
+<pubdate>2020-08-08</pubdate>
+<modified>2020-08-08</modified>
 <price>13.7</price>
 <phpver>5.4</phpver>
 <advanced>
@@ -36,5 +36,9 @@
   <sidebar3></sidebar3>
   <sidebar4></sidebar4>
   <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
 </sidebars>
 </plugin>
