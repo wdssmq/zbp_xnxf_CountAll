@@ -105,6 +105,9 @@ function xnxf_countall_checkNameOrCate(&$article)
   if ($article->Title == "未命名") {
     echo xnxf_CountAll_a($article->Url, $article->Title) . "【文章未命名】【{$edt}】<br>";
   }
+  if (substr($article->Alias, -1) == ".") {
+    echo xnxf_CountAll_a($article->Url, $article->Title) . "【别名以.结尾】【{$edt}】<br>";
+  }
 }
 function xnxf_CountAll_FixPostTags(&$article)
 {
@@ -125,6 +128,7 @@ function xnxf_CountAll_FixPostTags(&$article)
 function xnxf_CountAll_ZeroTag()
 {
   global $zbp;
+  $isTagPlus = $zbp->CheckPlugin('tagsPlus');
   $array = $zbp->GetTagList('', array('=', 'tag_Count', 0), array(
     'tag_ID' => 'ASC'
   ), 137, '');

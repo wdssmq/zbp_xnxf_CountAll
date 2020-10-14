@@ -66,6 +66,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <div style="clear:both;"></div>
     <form id="form" action="<?php echo BuildSafeURL("main.php") ?>" method="get" id="form">
       <input type="hidden" value="run" name="act">
+      <input type="hidden" value="<?php echo $zbp->GetCSRFToken();?>" name="csrfToken">
       <input type="submit" value="统计文章" class="button">
       <input type="button" value="统计附件" class="button js-Attachs">
       <input type="button" value="统计Tags" class="button js-Tags">
