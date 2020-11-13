@@ -86,11 +86,24 @@ function xnxf_CountAll_Other($p = 0)
     // 系统Bug待修复：https://github.com/zblogcn/zblogphp/issues/271
     // echo xnxf_CountAll_FixPostTags($post);
     xnxf_countall_checkNameOrCate($post);
+    //xnxf_countall_checkHTML($post);
   }
   if (count($array) < 137) {
     xnxf_CountAll_ZeroTag();
   }
   die();
+}
+function xnxf_countall_checkHTML(&$article)
+{
+  global $zbp;
+  $arrHtml = array("p", "div");
+  $con = $article->Content;
+  foreach ($arrHtml as $value) {
+    if (substr_count($con, "<{$value}") !== substr_count($con, "</{$value}")) {
+      $edt = xnxf_CountAll_a("{$zbp->host}zb_system/cmd.php?act=ArticleEdt&id={$article->ID}", "编辑", "编辑");
+      echo xnxf_CountAll_a($article->Url, $article->Title) . "【未闭合】【{$edt}】<br>";
+    }
+  }
 }
 function xnxf_countall_checkNameOrCate(&$article)
 {
