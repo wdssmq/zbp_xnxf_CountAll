@@ -83,10 +83,10 @@ function xnxf_CountAll_Other($p = 0)
     echo "<!--#echo-->";
   }
   foreach ($array as $post) {
-    // 系统Bug待修复：https://github.com/zblogcn/zblogphp/issues/271
-    // echo xnxf_CountAll_FixPostTags($post);
+    // 相关：https://github.com/zblogcn/zblogphp/issues/271
+    xnxf_CountAll_FixPostTags($post);
     xnxf_countall_checkNameOrCate($post);
-    //xnxf_countall_checkHTML($post);
+    xnxf_countall_checkHTML($post);
   }
   if (count($array) < 137) {
     xnxf_CountAll_ZeroTag();
@@ -122,6 +122,7 @@ function xnxf_countall_checkNameOrCate(&$article)
     echo xnxf_CountAll_a($article->Url, $article->Title) . "【别名以.结尾】【{$edt}】<br>";
   }
 }
+// 将文章 Tag 取出后重新转换为 ID
 function xnxf_CountAll_FixPostTags(&$article)
 {
   global $zbp;
@@ -134,9 +135,8 @@ function xnxf_CountAll_FixPostTags(&$article)
     $article->Tag = $newIDString;
     $article->Save();
     CountTagArrayString($newIDString . $tagsIDString);
-    return "<div style=\"clear:both;\">{$article->Title}{$article->TagsName}【{$newIDString}←{$tagsIDString}】</div>\n";
+    echo "<div style=\"clear:both;\">{$article->Title}{$article->TagsName}【{$newIDString}←{$tagsIDString}】</div>\n";
   }
-  return "";
 }
 function xnxf_CountAll_ZeroTag()
 {
