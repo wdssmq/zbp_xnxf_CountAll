@@ -11,6 +11,7 @@ if (!$zbp->CheckPlugin('xnxf_CountAll')) {
   $zbp->ShowError(48);
   die();
 }
+InstallPlugin_xnxf_CountAll();
 
 $blogtitle = '「水水」强制更新各种文章统计';
 require $blogpath . 'zb_system/admin/admin_header.php';

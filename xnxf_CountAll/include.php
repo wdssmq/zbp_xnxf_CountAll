@@ -8,6 +8,10 @@ function ActivePlugin_xnxf_CountAll()
 
 function InstallPlugin_xnxf_CountAll()
 {
+  global $zbp;
+  if ($zbp->CheckPlugin('zbpWCm')) {
+    zbpWCm_require("alpinejs", "xnxf_CountAll");
+  }
 }
 
 function UninstallPlugin_xnxf_CountAll()
