@@ -4,6 +4,10 @@ RegisterPlugin("xnxf_CountAll", "ActivePlugin_xnxf_CountAll");
 
 function ActivePlugin_xnxf_CountAll()
 {
+  global $zbp;
+  if ($zbp->CheckPlugin('zbpWCm')) {
+    zbpWCm_EnqJS("alpinejs", ['', 'foot']);
+  }
 }
 
 function InstallPlugin_xnxf_CountAll()
