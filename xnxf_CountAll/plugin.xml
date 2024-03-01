@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin version="php">
 <id>xnxf_CountAll</id>
-<name>强制更新各种文章统计</name>
+<name>「水水」强制更新各种文章统计</name>
 <url>//jq.qq.com/?_wv=1027&amp;k=555hND5</url>
 <note>强制更新各种文章统计，以及检测附件是否被引用</note>
 <description>置百丈玄冰而崩裂，掷须臾池水而漂摇。</description>
