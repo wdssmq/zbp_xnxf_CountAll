@@ -6,6 +6,7 @@ function ActivePlugin_xnxf_CountAll()
 {
   global $zbp;
   if ($zbp->CheckPlugin('zbpWCm')) {
+    // 在后台，底部引入 alpinejs
     zbpWCm_EnqJS("alpinejs", true, true);
   }
 }
@@ -14,6 +15,7 @@ function InstallPlugin_xnxf_CountAll()
 {
   global $zbp;
   if ($zbp->CheckPlugin('zbpWCm')) {
+    // 注册 alpinejs，管理插件将会下载 alpinejs 到本地
     zbpWCm_require("alpinejs", "xnxf_CountAll");
   }
 }
