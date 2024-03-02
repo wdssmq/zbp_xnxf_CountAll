@@ -26,7 +26,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <?php require "about.php"; ?>
   </div>
   <div id="divMain2">
-    <?php include "main_tabs/def.php"; ?>
+    <?php if (!$zbp->CheckPlugin('zbpWCm')) { ?>
+      <p>请安装并启用 zbpWCm 插件！！</p>
+      <p>前端组件管理 - Z-Blog 应用中心</p>
+      <p><a href="<?php echo $zbp->host . 'zb_users/plugin/AppCentre/main.php?id=16847' ?>" target="_blank" title="前端组件管理 - Z-Blog 应用中心"><?php echo $zbp->host . 'zb_users/plugin/AppCentre/main.php?id=16847' ?></a></p>
+    <?php } else { ?>
+      <?php include "main_tabs/def.php"; ?>
+    <?php } ?>
     <hr>
     <form id="xnxf-form" action="<?php echo BuildSafeURL("main.php") ?>" method="get">
       <input type="hidden" value="none" name="act">
@@ -50,7 +56,6 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       }
     });
   });
-
 </script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
