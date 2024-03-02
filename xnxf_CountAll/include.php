@@ -6,7 +6,7 @@ function ActivePlugin_xnxf_CountAll()
 {
   global $zbp;
   if ($zbp->CheckPlugin('zbpWCm')) {
-    zbpWCm_EnqJS("alpinejs", ['', 'foot']);
+    zbpWCm_EnqJS("alpinejs", true, true);
   }
 }
 
